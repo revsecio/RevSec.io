@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMAP Basics – RevSec.io</title>
+  <link rel="stylesheet" href="../assets/css/style.css"> <!-- optional -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Source+Code+Pro:wght@400;600&display=swap');
+    body {
+      background: radial-gradient(circle at top left, #0a0a0a, #000);
+      color: #e0e0e0;
+      font-family: 'Source Code Pro', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      color: #08f7fe;
+      text-shadow: 0 0 10px #08f7fe;
+    }
+    a {
+      color: #08f7fe;
+      text-decoration: none;
+    }
+    a:hover {
+      color: #f50057;
+    }
+    article {
+      max-width: 900px;
+      background: #111;
+      border: 1px solid #08f7fe;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(8, 247, 254, 0.2);
+    }
+    .tag {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 3px 8px;
+      border: 1px solid #08f7fe;
+      border-radius: 4px;
+      color: #08f7fe;
+      font-size: 0.8rem;
+    }
+    .back {
+      display: inline-block;
+      margin-top: 20px;
+      border: 1px solid #08f7fe;
+      border-radius: 4px;
+      padding: 8px 14px;
+      transition: 0.3s;
+    }
+    .back:hover {
+      background: #08f7fe;
+      color: #000;
+      box-shadow: 0 0 10px #08f7fe;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">Home</a> |
+    <a href="../resources.html">Resources</a> |
+    <a href="../about.html">About</a>
+  </nav>
+
+  <article>
+    <h1>NMAP Basics</h1>
+    <p class="date">October 25, 2025</p>
+    <span class="tag">Network</span>
+
+    <p>This section would go into your actual breakdown of Nmap: scanning fundamentals, flags, and real test results.</p>
+
+    <a href="../index.html" class="back">← Back to Blog</a>
+  </article>
+</body>
+</html>
