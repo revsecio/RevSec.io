@@ -1,184 +1,256 @@
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Source+Code+Pro:wght@400;600&display=swap');
+check the code out and fix the entire thing; the all button is lower down than all the others; fix it: <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RevSec.io</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Source+Code+Pro:wght@400;600&display=swap');
 
-  :root {
-    --bg: #080808;
-    --text: #e0e0e0;
-    --accent: #08f7fe;
-    --accent2: #f50057;
-    --card: #111;
-    --font-title: 'Orbitron', sans-serif;
-    --font-body: 'Source Code Pro', monospace;
-  }
+    :root {
+      --bg: #080808;
+      --text: #e0e0e0;
+      --accent: #08f7fe;
+      --accent2: #f50057;
+      --card: #111;
+      --font-title: 'Orbitron', sans-serif;
+      --font-body: 'Source Code Pro', monospace;
+    }
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  body {
-    background: radial-gradient(circle at top left, #0a0a0a, #000);
-    color: var(--text);
-    font-family: var(--font-body);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-    min-height: 100vh;
-  }
+    body {
+      background: radial-gradient(circle at top left, #0a0a0a, #000);
+      color: var(--text);
+      font-family: var(--font-body);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
 
-  nav {
-    width: 100%;
-    max-width: 900px;
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    margin-bottom: 30px;
-    border-bottom: 1px solid var(--accent);
-    padding-bottom: 10px;
-    animation: flicker 3s infinite alternate;
-  }
+    nav {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 10px;
+      animation: flicker 3s infinite alternate;
+    }
 
-  nav a {
-    color: var(--accent);
-    font-family: var(--font-title);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: 0.3s;
-  }
+    nav a {
+      color: var(--accent);
+      font-family: var(--font-title);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+    }
 
-  nav a:hover {
-    color: var(--accent2);
-    text-shadow: 0 0 10px var(--accent2);
-  }
+    nav a:hover {
+      color: var(--accent2);
+      text-shadow: 0 0 10px var(--accent2);
+    }
 
-  header {
-    text-align: center;
-    margin-bottom: 30px;
-    animation: flicker 2.5s infinite alternate;
-  }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      animation: flicker 2.5s infinite alternate;
+    }
 
-  h1 {
-    font-family: var(--font-title);
-    font-size: 2.5rem;
-    color: var(--accent);
-    text-shadow: 0 0 10px var(--accent);
-    letter-spacing: 2px;
-  }
+    h1 {
+      font-family: var(--font-title);
+      font-size: 2.5rem;
+      color: var(--accent);
+      text-shadow: 0 0 10px var(--accent);
+      letter-spacing: 2px;
+    }
 
-  h2 {
-    font-family: var(--font-title);
-    color: var(--accent2);
-    margin-bottom: 10px;
-    text-shadow: 0 0 8px var(--accent2);
-  }
+    h2 {
+      font-family: var(--font-title);
+      color: var(--accent2);
+      margin-bottom: 10px;
+      text-shadow: 0 0 8px var(--accent2);
+    }
 
-  main {
-    width: 100%;
-    max-width: 900px;
-    display: grid;
-    gap: 30px;
-  }
+    main {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      gap: 30px;
+    }
 
-  article {
-    background: var(--card);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 15px rgba(8, 247, 254, 0.1);
-    transition: all 0.3s ease;
-  }
+    article {
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(8, 247, 254, 0.1);
+      transition: all 0.3s ease;
+    }
 
-  article:hover {
-    box-shadow: 0 0 20px rgba(8, 247, 254, 0.4);
-    transform: translateY(-3px);
-  }
+    article:hover {
+      box-shadow: 0 0 20px rgba(8, 247, 254, 0.4);
+      transform: translateY(-3px);
+    }
 
-  .date {
-    font-size: 0.9rem;
-    color: #999;
-    margin-bottom: 10px;
-  }
+    .date {
+      font-size: 0.9rem;
+      color: #999;
+      margin-bottom: 10px;
+    }
 
-  .tag {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 3px 8px;
-    border: 1px solid var(--accent);
-    border-radius: 4px;
-    font-size: 0.8rem;
-    color: var(--accent);
-    transition: 0.3s;
-  }
+    .tag {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 3px 8px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      transition: 0.3s;
+    }
 
-  .tag:hover {
-    background: var(--accent);
-    color: #000;
-    box-shadow: 0 0 10px var(--accent);
-  }
+    .tag:hover {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 10px var(--accent);
+    }
 
-  /* --- FIX STARTS HERE --- */
-  .filter-bar {
-    margin-bottom: 30px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+    .filter-bar {
+      margin-bottom: 30px;
+      text-align: center;
+    }
 
-  .filter-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: 36px;
-    margin: 5px;
-    padding: 6px 14px;
-    border: 1px solid var(--accent);
-    border-radius: 4px;
-    background: transparent;
-    color: var(--accent);
-    font-family: var(--font-title);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: 0.3s;
-    vertical-align: middle;
-  }
+    .filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 5px;
+      padding: 6px 14px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: transparent;
+      color: var(--accent);
+      font-family: var(--font-title);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-  .filter-btn.active,
-  .filter-btn:hover {
-    background: var(--accent);
-    color: #000;
-    box-shadow: 0 0 10px var(--accent);
-  }
-  /* --- FIX ENDS HERE --- */
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 10px var(--accent);
+    }
 
-  .filter-icon {
-    width: 20px;
-    height: 20px;
-    filter: drop-shadow(0 0 6px var(--accent));
-  }
+    .filter-icon {
+      width: 20px;
+      height: 20px;
+      filter: drop-shadow(0 0 6px var(--accent));
+    }
 
-  footer {
-    margin-top: 50px;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #666;
-  }
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
 
-  a {
-    color: var(--accent);
-    text-decoration: none;
-  }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
 
-  a:hover {
-    color: var(--accent2);
-  }
+    a:hover {
+      color: var(--accent2);
+    }
 
-  @keyframes flicker {
-    0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
-    20%, 24%, 55% { opacity: 0.4; }
-  }
-</style>
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="resources.html">Resources</a>
+    <a href="about.html">About</a>
+  </nav>
+
+  <header>
+    <h1>RevSec.io</h1>
+    <p>Cybersecurity labs, investigations, and analysis</p>
+  </header>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">
+      All
+    </button>
+    <button class="filter-btn" data-filter="network">
+      <img src="icons/network.png" alt="Network Icon" class="filter-icon"> Network
+    </button>
+    <button class="filter-btn" data-filter="malware">
+      <img src="icons/malware.png" alt="Malware Icon" class="filter-icon"> Malware Analysis
+    </button>
+    <button class="filter-btn" data-filter="forensics">
+      <img src="icons/forensics.png" alt="Forensics Icon" class="filter-icon"> Forensics
+    </button>
+  </div>
+
+  <main>
+    <article data-tag="network">
+      <h2>NMAP Basics</h2>
+      <p class="date">October 25, 2025</p>
+      <p>Coming Soon...</p>
+      <span class="tag">Network</span>
+      <a href="posts/nmap-basics.html">Read More →</a>
+    </article>
+
+    <article data-tag="malware">
+      <h2>Coming Soon...</h2>
+      <span class="tag">Malware Analysis</span>
+    </article>
+
+    <article data-tag="forensics">
+      <h2>Coming Soon...</h2>
+      <span class="tag">Forensics</span>
+    </article>
+  </main>
+
+  <footer>
+    <p>© 2025 RevSec.io</p>
+  </footer>
+
+  <script>
+    const buttons = document.querySelectorAll('.filter-btn');
+    const articles = document.querySelectorAll('article');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+
+        articles.forEach(article => {
+          if (filter === 'all' || article.dataset.tag === filter) {
+            article.style.display = 'block';
+          } else {
+            article.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
