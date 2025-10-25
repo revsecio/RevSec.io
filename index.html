@@ -127,14 +127,19 @@
     .filter-bar {
       margin-bottom: 30px;
       text-align: center;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .filter-btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      margin: 5px;
       padding: 6px 14px;
+      height: 38px; /* consistent height for all */
       border: 1px solid var(--accent);
       border-radius: 4px;
       background: transparent;
@@ -143,6 +148,7 @@
       font-size: 0.9rem;
       cursor: pointer;
       transition: 0.3s;
+      vertical-align: middle;
     }
 
     .filter-btn.active,
@@ -194,9 +200,7 @@
 
   <!-- Filter Bar -->
   <div class="filter-bar">
-    <button class="filter-btn active" data-filter="all">
-      All
-    </button>
+    <button class="filter-btn active" data-filter="all">All</button>
     <button class="filter-btn" data-filter="network">
       <img src="icons/network.png" alt="Network Icon" class="filter-icon"> Network
     </button>
@@ -243,11 +247,7 @@
         const filter = btn.dataset.filter;
 
         articles.forEach(article => {
-          if (filter === 'all' || article.dataset.tag === filter) {
-            article.style.display = 'block';
-          } else {
-            article.style.display = 'none';
-          }
+          article.style.display = (filter === 'all' || article.dataset.tag === filter) ? 'block' : 'none';
         });
       });
     });
