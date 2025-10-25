@@ -73,13 +73,6 @@
       letter-spacing: 2px;
     }
 
-    h2 {
-      font-family: var(--font-title);
-      color: var(--accent2);
-      margin-bottom: 10px;
-      text-shadow: 0 0 8px var(--accent2);
-    }
-
     main {
       width: 100%;
       max-width: 900px;
@@ -94,19 +87,11 @@
       padding: 20px;
       box-shadow: 0 0 15px rgba(8, 247, 254, 0.1);
       transition: all 0.3s ease;
-      text-align: center;
     }
 
     article:hover {
       box-shadow: 0 0 20px rgba(8, 247, 254, 0.4);
       transform: translateY(-3px);
-    }
-
-    .category-icon {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 10px;
-      filter: drop-shadow(0 0 6px var(--accent));
     }
 
     .date {
@@ -138,9 +123,11 @@
     }
 
     .filter-btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       margin: 5px;
-      padding: 6px 12px;
+      padding: 6px 14px;
       border: 1px solid var(--accent);
       border-radius: 4px;
       background: transparent;
@@ -156,6 +143,12 @@
       background: var(--accent);
       color: #000;
       box-shadow: 0 0 10px var(--accent);
+    }
+
+    .filter-icon {
+      width: 20px;
+      height: 20px;
+      filter: drop-shadow(0 0 6px var(--accent));
     }
 
     footer {
@@ -194,15 +187,22 @@
 
   <!-- Filter Bar -->
   <div class="filter-bar">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="network">Network</button>
-    <button class="filter-btn" data-filter="malware">Malware Analysis</button>
-    <button class="filter-btn" data-filter="forensics">Forensics</button>
+    <button class="filter-btn active" data-filter="all">
+      <img src="icons/all.png" alt="All Icon" class="filter-icon"> All
+    </button>
+    <button class="filter-btn" data-filter="network">
+      <img src="icons/network.png" alt="Network Icon" class="filter-icon"> Network
+    </button>
+    <button class="filter-btn" data-filter="malware">
+      <img src="icons/malware.png" alt="Malware Icon" class="filter-icon"> Malware Analysis
+    </button>
+    <button class="filter-btn" data-filter="forensics">
+      <img src="icons/forensics.png" alt="Forensics Icon" class="filter-icon"> Forensics
+    </button>
   </div>
 
   <main>
     <article data-tag="network">
-      <img src="icons/network.png" alt="Network Icon" class="category-icon">
       <h2>NMAP Basics</h2>
       <p class="date">October 25, 2025</p>
       <p>Coming Soon...</p>
@@ -211,13 +211,11 @@
     </article>
 
     <article data-tag="malware">
-      <img src="icons/malware.png" alt="Malware Icon" class="category-icon">
       <h2>Coming Soon...</h2>
       <span class="tag">Malware Analysis</span>
     </article>
 
     <article data-tag="forensics">
-      <img src="icons/forensics.png" alt="Forensics Icon" class="category-icon">
       <h2>Coming Soon...</h2>
       <span class="tag">Forensics</span>
     </article>
