@@ -3,79 +3,151 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NMAP Basics – RevSec.io</title>
-  <link rel="stylesheet" href="../assets/css/style.css"> <!-- optional -->
+  <title>NMAP Basics | RevSec.io</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Source+Code+Pro:wght@400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Source+Code+Pro:wght@400;600&family=Share+Tech+Mono&display=swap');
+
+    :root {
+      --bg: #080808;
+      --text: #e0e0e0;
+      --accent: #08f7fe;
+      --accent2: #f50057; /* pink title */
+      --matrix: #00ff99;  /* green matrix text */
+      --card: #111;
+      --font-title: 'Orbitron', sans-serif;
+      --font-body: 'Source Code Pro', monospace;
+      --font-matrix: 'Share Tech Mono', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       background: radial-gradient(circle at top left, #0a0a0a, #000);
-      color: #e0e0e0;
-      font-family: 'Source Code Pro', monospace;
+      color: var(--text);
+      font-family: var(--font-body);
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 40px 20px;
       min-height: 100vh;
     }
-    h1 {
-      font-family: 'Orbitron', sans-serif;
-      color: #08f7fe;
-      text-shadow: 0 0 10px #08f7fe;
-    }
-    a {
-      color: #08f7fe;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #f50057;
-    }
-    article {
+
+    nav {
+      width: 100%;
       max-width: 900px;
-      background: #111;
-      border: 1px solid #08f7fe;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(8, 247, 254, 0.2);
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 10px;
+      animation: flicker 3s infinite alternate;
     }
-    .tag {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 3px 8px;
-      border: 1px solid #08f7fe;
-      border-radius: 4px;
-      color: #08f7fe;
-      font-size: 0.8rem;
-    }
-    .back {
-      display: inline-block;
-      margin-top: 20px;
-      border: 1px solid #08f7fe;
-      border-radius: 4px;
-      padding: 8px 14px;
+
+    nav a {
+      color: var(--accent);
+      font-family: var(--font-title);
+      text-transform: uppercase;
+      letter-spacing: 1px;
       transition: 0.3s;
     }
-    .back:hover {
-      background: #08f7fe;
-      color: #000;
-      box-shadow: 0 0 10px #08f7fe;
+
+    nav a:hover {
+      color: var(--accent2);
+      text-shadow: 0 0 10px var(--accent2);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: flicker 2.5s infinite alternate;
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 2.5rem;
+      color: var(--accent2); /* pink title */
+      text-shadow: 0 0 10px var(--accent2);
+      letter-spacing: 2px;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: var(--accent);
+    }
+
+    p.matrix-line {
+      font-family: var(--font-matrix);
+      color: var(--matrix);
+      font-size: 1rem;
+      margin-top: 8px;
+      text-shadow: 0 0 10px var(--matrix);
+      letter-spacing: 1px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 900px;
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(8, 247, 254, 0.2);
+    }
+
+    h2 {
+      color: var(--accent2);
+      font-family: var(--font-title);
+      margin-bottom: 15px;
+      text-shadow: 0 0 8px var(--accent2);
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent2);
+    }
+
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.4; }
     }
   </style>
 </head>
 <body>
   <nav>
-    <a href="../index.html">Home</a> |
-    <a href="../resources.html">Resources</a> |
-    <a href="../about.html">About</a>
+    <a href="index.html">Home</a>
+    <a href="resources.html">Resources</a>
+    <a href="about.html">About</a>
   </nav>
 
-  <article>
+  <header>
     <h1>NMAP Basics</h1>
-    <p class="date">October 25, 2025</p>
-    <span class="tag">Network</span>
+    <p class="subtitle">Network scanning fundamentals and examples</p>
+    <p class="matrix-line">example input</p>
+  </header>
 
-    <p>This section would go into your actual breakdown of Nmap: scanning fundamentals, flags, and real test results.</p>
+  <main>
+    <h2>Introduction</h2>
+    <p>This section will cover basic NMAP syntax, scan types, and how to interpret output in a cybersecurity investigation context.</p>
+  </main>
 
-    <a href="../index.html" class="back">← Back to Blog</a>
-  </article>
+  <footer>
+    <p>© 2025 RevSec.io</p>
+  </footer>
 </body>
 </html>
