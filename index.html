@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RevSec.io</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Source+Code+Pro:wght@400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Source+Code+Pro:wght@400;600&display=swap');
 
     :root {
       --bg: #080808;
@@ -64,19 +64,16 @@
 
     header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       animation: flicker 2.5s infinite alternate;
     }
 
-    /* EXACT header font copied from resources.html */
     h1 {
       font-family: var(--font-title);
-      font-weight: 700;
-      font-size: 2.8rem;
+      font-size: 2.5rem;
       color: var(--accent);
-      text-shadow: 0 0 20px var(--accent);
-      letter-spacing: 1.5px;
-      text-transform: none;
+      text-shadow: 0 0 10px var(--accent);
+      letter-spacing: 2px;
     }
 
     h2 {
@@ -145,7 +142,7 @@
       justify-content: center;
       gap: 8px;
       padding: 6px 14px;
-      height: 38px;
+      height: 38px; /* consistent height for all */
       border: 1px solid var(--accent);
       border-radius: 4px;
       background: transparent;
@@ -204,6 +201,7 @@
     <p>Cybersecurity labs, investigations, and analysis</p>
   </header>
 
+  <!-- Filter Bar -->
   <div class="filter-bar">
     <button class="filter-btn active" data-filter="all">All</button>
     <button class="filter-btn" data-filter="network">
