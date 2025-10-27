@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="/favicon.png">
+
+ <link rel="icon" type="image/png" href="/favicon.png">
+ 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About – RevSec.io</title>
@@ -25,14 +27,146 @@
     }
 
     body {
-      background-color: var(--bg);
+      background: radial-gradient(circle at top left, #0a0a0a, #000);
       color: var(--text);
       font-family: var(--font-body);
-      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 10px;
+      animation: flicker 3s infinite alternate;
+    }
+
+    nav a {
+      color: var(--accent);
+      font-family: var(--font-title);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent2);
+      text-shadow: 0 0 10px var(--accent2);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: flicker 2.5s infinite alternate;
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 2.5rem;
+      color: var(--accent);
+      text-shadow: 0 0 10px var(--accent);
+      letter-spacing: 2px;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      color: var(--accent2);
+      margin-bottom: 10px;
+      text-shadow: 0 0 8px var(--accent2);
+    }
+
+    main {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      gap: 30px;
+    }
+
+    .about-card {
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(8, 247, 254, 0.1);
+      line-height: 1.7;
+      text-align: left;
+      transition: 0.3s;
+    }
+
+    .about-card:hover {
+      box-shadow: 0 0 20px rgba(8, 247, 254, 0.4);
+      transform: translateY(-3px);
+    }
+
+    .spacer {
+      height: 20px;
+      width: 100%;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent2);
+    }
+
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.4; }
     }
   </style>
 </head>
 <body>
-  <!-- Your About page text goes here -->
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="resources.html">Resources</a>
+    <a href="about.html">About</a>
+  </nav>
+
+  <header>
+    <h1>About RevSec.io</h1>
+    <p>Exploring cybersecurity through practice, precision, and persistence.</p>
+  </header>
+
+  <main>
+    <div class="about-card">
+      <h2>The Project</h2>
+      <p>Welcome to RevSec.io, a personal cybersecurity blog focused on blue team defence and digital forensics. Included are hands-on projects, links to open-source tools, and other resources. I’m a complete beginner figuring things out as I go and this site is where I document it all. Hopefully, you’ll learn something along the way too.</p>
+
+      <div class="spacer"></div>
+
+      <p>If you notice any mistakes or want to drop some feedback, I’d really appreciate it; contact me at <a href="mailto:feedback@revsec.io">feedback@revsec.io</a>.</p>
+    </div>
+
+    <div class="about-card">
+      <h2>The Vision</h2>
+      <p>My vision is to simply have a place to put all my ideas, interests, and experiments. RevSec.io is an outlet for this — the best way for me to get everything out of my head and out somewhere where it might help someone else. Even when I make mistakes, they’re worth learning and documenting.</p>
+
+      <div class="spacer"></div>
+
+      <p>My long-term goal is to keep everything on this site free and available for everyone — just like the tools and resources that got me started. This means no pop-up ads or paywalls behind any article. I will never restrict any content I make because I personally can’t stand it.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 RevSec.io</p>
+  </footer>
 </body>
 </html>
