@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+ <link rel="icon" type="image/png" href="/favicon.png">
+ 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMAP Basics | RevSec.io</title>
+  <style>
+
+    
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Source+Code+Pro:wght@400;600&family=Share+Tech+Mono&display=swap');
+
+    :root {
+      --bg: #080808;
+      --text: #e0e0e0;
+      --accent: #08f7fe;
+      --accent2: #f50057;
+      --matrix: #00ff99;
+      --card: #111;
+      --font-title: 'Orbitron', sans-serif;
+      --font-body: 'Source Code Pro', monospace;
+      --font-matrix: 'Share Tech Mono', monospace;
+      --yellow: #ffc857;
+      --pink: #f50057; /* Added pink for the new header */
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #0a0a0a, #000);
+      color: var(--text);
+      font-family: var(--font-body);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 10px;
+      animation: flicker 3s infinite alternate;
+    }
+
+    nav a {
+      color: var(--accent);
+      font-family: var(--font-title);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent2);
+      text-shadow: 0 0 10px var(--accent2);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: flicker 2.5s infinite alternate;
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      color: var(--accent2);
+      text-shadow: 0 0 10px var(--accent2);
+      letter-spacing: 2px;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: var(--accent);
+    }
+
+    main {
+      width: 100%;
+      max-width: 900px;
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(8, 247, 254, 0.2);
+      position: relative;
+    }
+
+    /* Directory (Table of Contents) */
+    .directory {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.directory a {
+      background: rgba(8,247,254,0.06);
+      /* ⬇️ DECREASE THIS VALUE for a thinner border */
+      border: 2px solid var(--accent);
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--accent);
+      font-family: var(--font-title);
+      text-transform: none;
+      font-size: 0.85rem;
+      transition: 0.18s;
+      /* ⬇️ DECREASE THIS VALUE for a thinner "chunky" shadow offset */
+      box-shadow: 2px 2px 0 0 var(--accent);
+    }
+
+.directory a:hover {
+      background: rgba(245,0,87,0.08);
+      color: var(--accent2);
+      /* ➡️ Remove the vertical transform to simulate the 'pop-out' shadow being 'pushed' */
+      transform: none;
+      /* ➡️ Change the box-shadow to a flat style */
+      box-shadow: 0 0 0 0 var(--accent2), 0 0 10px rgba(245,0,87,0.4);
+    }
+
+    .green-code {
+      font-family: var(--font-matrix);
+      color: var(--matrix);
+      font-size: 0.95rem;
+      text-shadow: 0 0 12px rgba(0,255,153,0.25);
+      background: rgba(0,255,153,0.04);
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 12px 0;
+      border: 1px solid rgba(0,255,153,0.12);
+    }
+
+    .white-code {
+      font-family: var(--font-matrix);
+      color: #fff;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.04);
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 12px 0;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    /* NEW: Neon Blue for bracketed text inside white code block */
+    .white-code .neon-blue {
+        color: var(--accent);
+    }
+
+    /* NEW: Pink header style */
+    .pink-header {
+      font-family: var(--font-title);
+      color: var(--pink);
+      font-size: 1.25rem;
+      margin: 18px 0 8px 0;
+      text-shadow: 0 0 10px var(--pink);
+      letter-spacing: 1px;
+    }
+
+    .yellow-box {
+      background: rgba(255,200,87,0.08);
+      border: 1px solid rgba(255,200,87,0.3);
+      color: var(--text);
+      padding: 14px;
+      margin: 16px 0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      box-shadow: 0 0 12px rgba(255,200,87,0.1);
+    }
+
+    .small-white {
+      color: #fff;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      margin-top: 10px;
+    }
+
+    .large-header {
+      font-family: var(--font-title);
+      color: var(--accent2);
+      font-size: 1.25rem;
+      margin: 18px 0 8px 0;
+      text-shadow: 0 0 10px var(--accent2);
+      letter-spacing: 1px;
+    }
+
+    /* Styles for the Quiz section */
+    .quiz-container {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid var(--pink);
+        border-radius: 8px;
+        background: rgba(245,0,87,0.05);
+    }
+    .quiz-question {
+        font-family: var(--font-title);
+        color: var(--pink);
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    .quiz-option {
+        color: var(--text);
+        margin-bottom: 5px;
+    }
+    .correct-answer-text {
+        color: var(--matrix); /* Use the green matrix color for the correct answer */
+        font-weight: bold;
+    }
+    .reveal-btn {
+        background: var(--pink);
+        color: var(--text);
+        border: none;
+        padding: 8px 15px;
+        margin-top: 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: background 0.3s, box-shadow 0.3s;
+    }
+    .reveal-btn:hover {
+        background: var(--accent2);
+        box-shadow: 0 0 10px var(--accent2);
+    }
+
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 8px 16px;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      font-family: var(--font-title);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+    }
+
+    .back-btn:hover {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent2);
+    }
+
+    pre { white-space: pre-wrap; word-break: break-word; }
+
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.4; }
+    }
+
+
+/* === CUSTOM COLLAPSIBLE APPEARANCE (your tweaks) === */
+
+/* (1) Change the arrow icon */
+summary.fold-header::after {
+  content: "➤";
+  transform: rotate(90deg);
+  transition: transform 0.2s ease;
+  color: var(--accent2);
+}
+details[open] > summary.fold-header::after {
+  transform: rotate(0deg);
+}
+
+/* (2) Fade-in animation for open content */
+details[open] .fold-content {
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* (3) Styled summary header background and hover */
+summary.fold-header {
+  background: rgba(8,247,254,0.05);
+  border: 1px solid rgba(8,247,254,0.15);
+  border-radius: 5px;
+  padding: 10px;
+  transition: background 0.3s;
+}
+summary.fold-header:hover {
+  background: rgba(8,247,254,0.1);
+}
+
+    /* === Back to Top Button Styles === */
+    #back-to-top {
+      display: none; /* Hidden by default */
+      position: fixed; /* Fixed position */
+      bottom: 20px; /* Place the button at the bottom of the page */
+      right: 30px; /* Place the button 30px from the right */
+      z-index: 99; /* Make sure it does not overlap other content */
+      border: none; /* Remove border */
+      outline: none; /* Remove outline */
+      background-color: rgba(8, 247, 254, 0.15); /* Light accent background */
+      color: var(--accent); /* Accent text color */
+      cursor: pointer; /* Add a mouse pointer on hover */
+      padding: 15px; /* Some padding */
+      border-radius: 50%; /* Make it circular */
+      font-size: 18px; /* Increase font size */
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+      border: 1px solid var(--accent);
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+    }
+
+    #back-to-top:hover {
+      background-color: var(--accent); /* Darker on hover */
+      color: var(--card); /* Black text on hover */
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/index.html">Home</a>
+    <a href="/resources.html">Resources</a>
+    <a href="/about.html">About</a>
+  </nav>
+
+
+  
+  <header>
+    <h1>NMAP Basics</h1>
+    <p class="subtitle">NMAP -sT and -sS st</p>
+  </header>
+
+  <main>
+    <div class="directory" aria-label="Page directory">
+      <a href="#finding-ips">Finding your IP Addresses</a>
+      <a href="#installing-nmap">Installing NMAP (-sT)</a>
+      <a href="#stealth-scans">Stealth Scans (-sS)</a>
+      <a href="#wireshark-tcp">Wireshark & TCP</a>
+      <a href="#unknown-ips">Unknown IPs (-O -sV)</a>
+    </div>
+
+<p class="small-white" style="font-size:0.65rem; color:#888888;">25th October 2025</p>
+<p class="small-white" style="font-size:0.65rem;">
+ 
+    <h2 id="finding-ips" class="large-header">Finding your IP Addresses on a connected networks</h2>
+
+    <p class="small-white">First, I’ll need to show all network interfaces and their addresses, a command is needed which shows these network interfaces.</p>
+
+    <pre class="green-code">ip addr show</pre>
+
+   <p class="small-white">This input is basic and beneficial, it gives</p>
+    <ul class="small-white" style="margin-left:18px;">
+      <li>All network interfaces (eg VPNs and Bluetooth on my device)</li>
+      <li>Whether network interfaces are up or down</li>
+      <li>MAC addresses</li>
+      <li>Subnet info</li>
+    </ul>
+
+    <pre class="white-code">Output:
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute 
+       valid_lft forever preferred_lft forever
+
+2: enp0s25: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc fq_codel state DOWN group default qlen 1000
+    link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
+
+  
+3: wwx028037ec0200: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
+
+
+
+4: wlp3s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+
+    link/ether &lt;span style="color:#08f7fe"&gt;xx:xx:xx:xx:xx:xx&lt;/span&gt; brd ff:ff:ff:ff:ff:ff
+    &lt;span style="color:#08f7fe"&gt;inet 172.16.0.xx&lt;/span&gt;&lt;span style="color:#08f7fe"&gt;/24&lt;/span&gt; brd 172.16.0.xx scope global dynamic noprefixroute wlp3s0
+       valid_lft 172036sec preferred_lft 172036sec
+    inet6 fd31:1f25:3a00:xxx:xxxx:xxxx:xxxx:xxxx/64 scope global temporary dynamic 
+       valid_lft 604037sec preferred_lft 85113sec
+    inet6 fd31:1f25:3a00:642:xxxx:xxxx:xxxx:xxxx/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 2590184sec preferred_lft 602984sec
+    inet6 2a02:c7c:3205:fa00:xxxx:xxxx:xxxx:xxxx/64 scope global temporary dynamic 
+       valid_lft 1839sec preferred_lft 1784sec
+    inet6 2a02:c7c:3205:fa00:xxxx:xxxx:xxxx:xxxx/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 1839sec preferred_lft 1784sec
+    inet6 fe80::8de0:xxxx:xxxx:xxxx/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+</pre>
+
+    <p class="small-white">Looks complicated right? Lets break it down and gather key info from this output.</p>
+<p class="small-white"> </p>First of all, loopback represents an internal self connection address; the computer talking to itself.
+
+<p class="small-white"> In the second line, enp0s25 simply refers to the ethernet the state being down means there is no cable plugged in. 
+
+<p class="small-white"> The fourth line is the most important for what we’re doing; wlp3s0 refers to Wifi
+
+link/ether. <p class="small-white"><strong> xx:xx:xx:xx:xx:xx</strong> is my MAC address for this device and...
+
+inet <strong>172.16.9.xx/24 </strong> is my device’s IP address while /24 represents the subnet mask meaning my local network (my WIFI) is actually 172.16.0.0/24</p>
+<div style="margin-top: 50px;"></div>
+<div class="yellow-box">
+  <p style="margin-bottom: 40px; line-height: 1.6;">
+    Think of a subnet mask as the fence around a network; /24 draws a line from where devices belong, for example, /24 represents everyone whose IP starts with 172.16 being in the local network, supporting up to 254 devices.
+  </p>
+
+  <p style="margin-top: 0; line-height: 1.6;">
+    The smaller the number, the more devices that can be supported on a local network; 16 = 65k devices, /8 is millions.
+  </p>
+</div>
+
+<div style="margin-top: 100px;"></div>
+
+    <h2 id="installing-nmap" class="large-header">Installing NMAP for a basic -sT scan</h2>
+
+
+<p class="small-white">Therefore, I now know that 172.16.0.0/24 is my local network. Time to use nmap. 
+
+<br><br>
+For Ubuntu/Debian linux devices, use the command</p>
+
+<pre class="green-code">sudo apt update && sudo apt install -y nmap</pre>
+
+<p class="small-white"> 
+Now, I want to run a TCP connect scan on ports 80 and 443 across every 
+host in the subnet which represents my entire network.<br>
+<div style="margin-top: 50px;"></div>
+
+<div class="yellow-box">
+  <p style="margin-bottom: 0px; line-height: 1.6;">
+    Ports are number sections on a computer that let different programs talk over the network, each assigned port assures traffic goes to the right program.<br><br>
+    Some examples include:<br> 
+    Port 80 (HTTP): Handles unencrypted web traffic.<br>
+    Port 443 (HTTPS): Handles encrypted web traffic.<br>
+    Port 25 (SMTP): Used to send emails between mail servers.
+  </p>
+</div>
+<div style="margin-top: 50px;"></div>
+
+<p class="small-white"> 
+Here's our input to do this</p>
+<pre class="green-code">sudo nmap -sT -p 80,443 172.16.0.0/24</pre>
+
+<p class="small-white">
+<div style="margin-top: 30px;"></div>
+
+    <strong>Let's break this code down;</strong><br><br>
+
+  - sudo: means to run from root; it’s not strictly required here but it helps prevent permission errors.<br>
+  - nmap: the tool we’re using to scan the networks.<br>
+  - -sT: a TCP connect scan (a full TCP handshake).<br>
+  - -p 80,443: scan only these ports.<br>
+  - 172.16.0.0/24: scan the subnet.
+  <div style="margin-top: 30px;"></div>
+
+</p>
+
+
+
+    <pre class="white-code">Output:
+PORT    STATE SERVICE
+80/tcp  open  http
+443/tcp open  https
+MAC Address: 7H:6T:xx:xx:xx:xx (Wifi router)
+<div style="margin-top: 20px;"></div>
+PORT    STATE  SERVICE
+80/tcp  closed http
+443/tcp closed https
+MAC Address: FA:44:3P:xx:xx:xx (Unknown)
+<div style="margin-top: 20px;"></div>
+PORT    STATE    SERVICE
+80/tcp  filtered http
+443/tcp filtered https
+MAC Address: FE:DD:38:xx:xx:xx (Unknown)
+</pre>
+
+
+<div style="margin-top: 30px;"></div>
+
+<p class="small-white">
+  <strong>But what does it mean?</strong><br><br>
+
+  This is a basic TCP connection. This type of handshake is very loud and easily detectable by SIEMs, often triggering alarms.<br><br>
+
+  Devices likely to have ports 80 and 443 open include routers (such as wifi routers in this example) because of their setup requirements. When a result is marked as “filtered,” it means a firewall is blocking the handshake request.<br><br>
+
+  Smart TVs and printers may also have web dashboards for configuration, updates, or access, the same applies to some streaming boxes.<br><br>
+
+  Some bots automatically scan for port 80 due to its lack of encryption. They may attempt default passwords to gain access to the network or perform packet sniffing.
+</p>
+
+<div style="margin-top: 80px;"></div>
+
+  <header>
+    <h1 id="stealth-scans">Stealth Scans</h1>
+  </header>
+    <p class="small-white">This scan is stealthier because it never completes a full TCP handshake. It’s less noisier in simple logs and has less of a footprint but can still raise an alarm in some SIEMs. Some attackers may use -sS scans as a part of a larger tactic.  </p>
+
+    <pre class="green-code">sudo nmap -sS -p 80,443 172.16.0.0/24</pre>
+
+   <p class="small-white"></p>The output of -sS and -sT may look similar but in certain setups, -sS can give more accurate states of devices on a network due to the faster scan of not requiring a full handshake.
+    <ul class="small-white" style="margin-left:18px;">
+      <li>All network interfaces (eg VPNs and Bluetooth on my device)</li>
+      <li>Whether network interfaces are up or down</li>
+      <li>MAC addresses</li>
+      <li>Subnet info</li>
+    </ul>
+
+<div style="margin-top: 100px;"></div>
+
+  <header>
+    <h1 id="wireshark-tcp">Wireshark and TCP Handshakes</h1>
+  </header>
+
+<p class="small-white">All connections, including our very own port scanning, can be seen through a tool
+called Wireshark. Wireshark is what is known as a packet sniffer; a
+tool that captures network traffic. </p>
+
+<p class="small-white">We will discover more about Wireshark in future posts but for now, we
+will look at the simple TCP connection from the wireshark logs:</p>
+
+<div class="yellow-box">
+As a reminder, a TCP connection are two devices agreeing to talk:
+<br><br>
+SYN is the first step: "I want to start a connection"
+<br>
+SYN-ACK: "Alright, I’m ready"
+<br>
+ACK: "Acknowledged"
+</div>
+
+<p class="small-white">A TCP connection will be attempted on port 666; a unique port just to showcase the example of where the request appears in Nmap.</p>
+
+<pre class="white-code"><span class="neon-blue">STEP 1: SYN - INITIATE CONNECTION
+"Hello 172.16.0.xxx, are you listening on port 666? I'd like to start a conversation"</span>
+No. 2764
+Src: 172.16.0.xxx → Dst: 172.16.0.xxx
+Src Port: 57450 → Dst Port: 666
+Flags: SYN
+Info: [SYN] Seq=0 Win=64240 Len=0 MSS=1460 SACK_PERM TSval=2012856285 TSecr=0 WS=128
+
+<span class="neon-blue">STEP 2: SYN-ACK - REJECTION
+"Connection refused. Port 666 is closed and I'm not accepting requests"</span>
+No. 2765
+Src: 172.16.0.xxx → Dst: 172.16.0.xxx
+Src Port: 666 → Dst Port: 57450
+Flags: RST, ACK
+Info: [RST, ACK] Seq=1 Ack=1 Win=2920 Len=0
+
+<span class="neon-blue">Step 3: ACK</span>
+There is no ACK since the handshake was rejected.
+It would look like [RST ACK] = Reset/End</pre>
+
+<div style="margin-top: 100px;"></div>
+
+  <header>
+    <h2 id="unknown-ips" class="pink-header">Finding info about unknown IP’s</h2>
+  </header>
+
+<p class="small-white">
+I have a mystery IP and I want to figure out what device it is on my network as I’m not sure. 
+Here’s how I find out more information:
+</p>
+
+<pre class="green-code">sudo nmap -O -sV -Pn 172.16.0.150</pre>
+
+<div class="yellow-box">
+Lets break down what this does:
+<ul>
+<li>-O = OS detection (Operating System)</li>
+<li>-sV = probes open ports to determine service/version info</li>
+<li>-Pn = skips host discovery and assumes the host is up (useful if a firewall blocks pings)</li>
+</ul>
+<p style="margin-top: 10px;">It’s as simple as that; it gives us direct information on the IP and since no port is specified, it scans all ports. </p>
+</div>
+
+<p class="small-white">From this output...</p>
+
+<pre class="white-code">
+All 1000 scanned ports on 172.16.0.xxx are in ignored states. Not shown: 1000 closed tcp ports (reset) 
+MAC Address: C2:C9:E3:xx:xx:xx (Unknown) 
+
+Running: DTE embedded, lwIP 1.4.X, Enlogic embedded, Ocean Signal embedded, Philips embedded OS 
+
+OS details: DTE Energy Bridge (lwIP stack), Enlogic PDU (FreeRTOS/lwIP), Ocean Signal E101V emergency beacon (FreeRTOS/lwIP), Philips Hue Bridge (lwIP stack v1.4.0) 
+Network Distance: 1 hop 
+OS and Service detection performed. 
+</pre>
+
+<p class="small-white">facts: </p>
+<ul class="small-white" style="margin-left:18px;">
+  <li>The device is up and reachable </li>
+  <li>All 1000 TCP ports are closed; scans are likely prevented via firewall</li>
+  <li>OS fingerprint is a lightweight embedded OS, likely matches are Phillips hue bridge</li>
+</ul>
+
+<p class="small-white">can you guess what this device is?</p>
+<p class="small-white">172.16.0.xxx is...</p>
+
+<div class="quiz-container">
+    <p class="quiz-question">What is this device?</p>
+    <p class="quiz-option">A.) iPhone</p>
+    <p class="quiz-option">B.) PC</p>
+    <p class="quiz-option">C.) Printers</p>
+    <p class="quiz-option">D.) A wifi extender</p>
+    
+    <button class="reveal-btn" onclick="revealAnswer()">Reveal Answer</button>
+
+    <p class="small-white" style="margin-top: 10px; font-size: 0.85rem; color: var(--matrix);">
+        <span id="quiz-answer" style="display: none;">Correct answer: D (Although the Nmap output suggests a Philips Hue Bridge, a Wifi Extender is a commonly found lightweight embedded device in home networks, which is the type of device the OS fingerprinting picked up.)</span>
+    </p>
+</div>
+<div style="margin-top: 100px;"></div>
+
+<div style="border-top: 1px dashed #333; padding-top: 40px; margin-bottom: 30px;">
+    <p class="small-white" style="font-size: 1.05rem; text-align: center; margin-bottom: 20px;">
+        So far we’ve covered the basics on NMAP including finding your IP address, installing NMAP, basic -sT and -sS scans along with TCP connections and finding more information about IPs on your network. 
+    </p>
+    <p class="small-white" style="font-size: 1.05rem; text-align: center; margin-bottom: 20px;">
+        This is barely the beginning and there is a lot more to uncover which we will do in future blog posts. Everything from scanning speeds to prevent detection, decoy IPs and searching for vulnerabilities in your own network. 
+    </p>
+    <p class="small-white" style="font-size: 1.05rem; text-align: center;">
+        Stay tuned for the next blog posts and thank you for reading!
+    </p>
+</div>
+<p class="small-white" style="font-size:0.65rem;">This project was inspired by Network Chuck’s YouTube video “<a href="https://www.youtube.com/watch?v=4t4kBkMsDbQ&t=600s" target="_blank" rel="noopener noreferrer">Nmap Tutorial to Find Network Vulnerabilities</a>”</p>
+
+    <footer>
+      <p class="small-white" style="font-size:0.75rem; color:#777;">© RevSec.io</p>
+    </footer>
+
+  </main>
+
+  <button onclick="topFunction()" id="back-to-top" title="Go to top">▲</button>
+
+  <script>
+    // --- Quiz Functionality ---
+    function revealAnswer() {
+        const answerSpan = document.getElementById('quiz-answer');
+        const revealButton = document.querySelector('.reveal-btn');
+        answerSpan.style.display = 'inline';
+        revealButton.style.display = 'none'; // Hide the button after click
+        
+        // Optionally highlight the correct option (D)
+        const options = document.querySelectorAll('.quiz-option');
+        if (options.length >= 4) {
+            options[3].style.color = 'var(--matrix)';
+            options[3].style.fontWeight = 'bold';
+        }
+    }
+    
+    // --- Back to Top Functionality ---
+    let mybutton = document.getElementById("back-to-top");
+
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+      if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+        mybutton.style.display = "flex";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+  </script>
+</body>
+</html>
