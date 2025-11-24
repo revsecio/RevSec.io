@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+ <link rel="icon" type="image/png" href="/favicon.png">
+ 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMAP Basics | RevSec.io</title>
+  <style>
+
+    
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Source+Code+Pro:wght@400;600&family=Share+Tech+Mono&display=swap');
+
+    :root {
+      --bg: #080808;
+      --text: #e0e0e0;
+      --accent: #08f7fe;
+      --accent2: #f50057;
+      --matrix: #00ff99;
+      --card: #111;
+      --font-title: 'Orbitron', sans-serif;
+      --font-body: 'Source Code Pro', monospace;
+      --font-matrix: 'Share Tech Mono', monospace;
+      --yellow: #ffc857;
+      --pink: #f50057; /* Added pink for the new header */
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #0a0a0a, #000);
+      color: var(--text);
+      font-family: var(--font-body);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 10px;
+      animation: flicker 3s infinite alternate;
+    }
+
+    nav a {
+      color: var(--accent);
+      font-family: var(--font-title);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent2);
+      text-shadow: 0 0 10px var(--accent2);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: flicker 2.5s infinite alternate;
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      color: var(--accent2);
+      text-shadow: 0 0 10px var(--accent2);
+      letter-spacing: 2px;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: var(--accent);
+    }
+
+    main {
+      width: 100%;
+      max-width: 760px;
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(8, 247, 254, 0.2);
+      position: relative;
+    }
+
+    /* Directory (Table of Contents) */
+    .directory {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.directory a {
+      background: rgba(8,247,254,0.06);
+      /* ⬇️ DECREASE THIS VALUE for a thinner border */
+      border: 2px solid var(--accent);
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--accent);
+      font-family: var(--font-title);
+      text-transform: none;
+      font-size: 0.85rem;
+      transition: 0.18s;
+      /* ⬇️ DECREASE THIS VALUE for a thinner "chunky" shadow offset */
+      box-shadow: 2px 2px 0 0 var(--accent);
+    }
+
+.directory a:hover {
+      background: rgba(245,0,87,0.08);
+      color: var(--accent2);
+      /* ➡️ Remove the vertical transform to simulate the 'pop-out' shadow being 'pushed' */
+      transform: none;
+      /* ➡️ Change the box-shadow to a flat style */
+      box-shadow: 0 0 0 0 var(--accent2), 0 0 10px rgba(245,0,87,0.4);
+    }
+
+    .green-code {
+      font-family: var(--font-matrix);
+      color: var(--matrix);
+      font-size: 0.95rem;
+      text-shadow: 0 0 12px rgba(0,255,153,0.25);
+      background: rgba(0,255,153,0.04);
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 12px 0;
+      border: 1px solid rgba(0,255,153,0.12);
+    }
+
+    .white-code {
+      font-family: var(--font-matrix);
+      color: #fff;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.04);
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 12px 0;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    /* NEW: Neon Blue for bracketed text inside white code block */
+    .white-code .neon-blue {
+        color: var(--accent);
+    }
+
+    /* NEW: Pink header style */
+    .pink-header {
+      font-family: var(--font-title);
+      color: var(--pink);
+      font-size: 1.25rem;
+      margin: 18px 0 8px 0;
+      text-shadow: 0 0 10px var(--pink);
+      letter-spacing: 1px;
+    }
+
+    .yellow-box {
+      background: rgba(255,200,87,0.08);
+      border: 1px solid rgba(255,200,87,0.3);
+      color: var(--text);
+      padding: 14px;
+      margin: 16px 0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      box-shadow: 0 0 12px rgba(255,200,87,0.1);
+    }
+
+    .small-white {
+      color: #fff;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    
+
+    .large-header {
+      font-family: var(--font-title);
+      color: var(--accent2);
+      font-size: 1.25rem;
+      margin: 18px 0 8px 0;
+      text-shadow: 0 0 10px var(--accent2);
+      letter-spacing: 1px;
+    }
+
+    /* Styles for the Quiz section */
+    .quiz-container {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid var(--pink);
+        border-radius: 8px;
+        background: rgba(245,0,87,0.05);
+    }
+    .quiz-question {
+        font-family: var(--font-title);
+        color: var(--pink);
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    .quiz-option {
+        color: var(--text);
+        margin-bottom: 5px;
+    }
+    .correct-answer-text {
+        color: var(--matrix); /* Use the green matrix color for the correct answer */
+        font-weight: bold;
+    }
+    .reveal-btn {
+        background: var(--pink);
+        color: var(--text);
+        border: none;
+        padding: 8px 15px;
+        margin-top: 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: background 0.3s, box-shadow 0.3s;
+    }
+    .reveal-btn:hover {
+        background: var(--accent2);
+        box-shadow: 0 0 10px var(--accent2);
+    }
+
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 8px 16px;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      font-family: var(--font-title);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: 0.3s;
+    }
+
+    .back-btn:hover {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent2);
+    }
+
+    pre { white-space: pre-wrap; word-break: break-word; }
+
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.4; }
+    }
+
+
+/* === CUSTOM COLLAPSIBLE APPEARANCE (your tweaks) === */
+
+/* (1) Change the arrow icon */
+summary.fold-header::after {
+  content: "➤";
+  transform: rotate(90deg);
+  transition: transform 0.2s ease;
+  color: var(--accent2);
+}
+details[open] > summary.fold-header::after {
+  transform: rotate(0deg);
+}
+
+/* (2) Fade-in animation for open content */
+details[open] .fold-content {
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* (3) Styled summary header background and hover */
+summary.fold-header {
+  background: rgba(8,247,254,0.05);
+  border: 1px solid rgba(8,247,254,0.15);
+  border-radius: 5px;
+  padding: 10px;
+  transition: background 0.3s;
+}
+summary.fold-header:hover {
+  background: rgba(8,247,254,0.1);
+}
+
+    /* === Back to Top Button Styles === */
+    #back-to-top {
+      display: none; /* Hidden by default */
+      position: fixed; /* Fixed position */
+      bottom: 20px; /* Place the button at the bottom of the page */
+      right: 30px; /* Place the button 30px from the right */
+      z-index: 99; /* Make sure it does not overlap other content */
+      border: none; /* Remove border */
+      outline: none; /* Remove outline */
+      background-color: rgba(8, 247, 254, 0.15); /* Light accent background */
+      color: var(--accent); /* Accent text color */
+      cursor: pointer; /* Add a mouse pointer on hover */
+      padding: 15px; /* Some padding */
+      border-radius: 50%; /* Make it circular */
+      font-size: 18px; /* Increase font size */
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+      border: 1px solid var(--accent);
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+    }
+
+    #back-to-top:hover {
+      background-color: var(--accent); /* Darker on hover */
+      color: var(--card); /* Black text on hover */
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/index.html">Home</a>
+    <a href="/resources.html">Resources</a>
+    <a href="/about.html">About</a>
+  </nav>
+
+
+  
+  <header>
+    <h1>NMAP Basics</h1>
+    <p class="subtitle">NMAP -sT and -sS st</p>
+  </header>
+
+  <main>
+    <div class="directory" aria-label="Page directory">
+      <a href="#NDR1">Why I'm building an NDR</a>
+      <a href="#PLAN">The plan</a>
+      <a href="#INIT">Initial attempt: Full-Network Bridge</a>
+      <a href="#FALI">The Failure</a>
+        <a href="#PIVVY">Pivot: Single-Device NDR</a>
+    </div>
+
+<p class="small-white" style="font-size:0.65rem; color:#888888;">24th November 2025</p>
+<p class="small-white" style="font-size:0.65rem;">
+ 
+    <h2 id="NDR1" class="large-header"> Why I'm building an NDR</h2>
+
+   <p class="small-white">
+I only realised a week ago the true complexity of a SIEM.<br><br>
+A SIEM isn't simply a network-level device; it contains logs from every single device's internal actions.<br>
+Having never interacted with SIEM before, I didn't realise this.<br><br>
+
+As a complete beginner, TryHackMe labs and certs are great, what I'm lacking is experience, but a SIEM requires hardware or a costly subscription both of which I don't have, which is why I decided to start with an NDR; cheaper, lower power and beginner friendly. It doesn't analyse every device the same way a SIEM does, but it's still beneficial for spotting strange traffic, flagging unusual detections and detecting anomalies on a network.<br><br>
+
+An NDR exports raw data to structured data (logs/flow records) to a dashboard through some level of automation.<br><br>
+
+Wireshark isn't an NDR because it contains raw packets with no automation or alerts.<br><br>
+
+NMAP isn't an NDR because it's a network scanner that doesn't monitor ongoing behaviour.
+</p>
+
+
+<div style="height: 4rem;"></div>
+
+
+   <h2 id="PLAN" class="large-header"> The Plan</h2>
+<p class="small-white">
+I’m building a minimal packet-based NDR which captures raw packets, converts them into structured events, and produces basic alerts based on simple rules.<br><br>
+
+The plan is as follows:<br>
+1.) Use my Raspberry Pi model 2 as a bridge between my modem and router to collect all information about the network<br>
+2.) Packet capture on the Pi<br>
+3.) Send PCAPs to my laptop through SSH/rsync<br>
+4.) Install a parser on my Laptop (ZeekLite or Tshark output to... JSON?)<br>
+5.) Alerting and dashboard (simple web UI or Python Flask page)
+</p>
+
+<div style="height: 4rem;"></div>
+
+<h2 id="INIT" class="large-header"> Initial attempt: Full-Network Bridge</h2>
+<p class="small-white">
+I initially intended for a bridge to be between the modem and router to track every device on the network, and it predictably blew up.<br><br>
+
+I grabbed my Raspberry Pi 2 and began setting it up.<br><br>
+
+My prior OS was in shambles; I'd attempted a project on this before, had forgotten the user password, so it was time to flash a new OS.<br><br>
+
+This can be easily done through Raspberry Pi Imager on Linux. Simply insert the SD, select the SD and select the OS. For this project, I needed something super lightweight, which is why I chose:<br>
+<strong>PI OS Lite</strong><br><br>
+
+I plugged the Ethernet into the router, and the other one I left unplugged until I was ready to begin the bridge. 
+</p>
+
+
+    <pre class="green-code">sudo brctl addbr br0
+sudo brctl addif br0 eth0
+sudo brctl addif br0 eth1
+
+sudo ip link set eth0 up
+sudo ip link set eth1 up
+sudo ip link set br0 up</pre>
+
+   <p class="small-white">
+The first line creates the bridge interface called br0 with the ports eth0 and eth1; they're now attached to this bridge, so eth0 and eth1 are no longer their own interface. The link set simply brings the interfaces online. 
+</p>
+
+<div style="height: 4rem;"></div>
+
+
+
+
+   <h2 id="PLAN" class="large-header"> The Plan</h2>
+<p class="small-white">
+I’m building a minimal packet-based NDR which captures raw packets, converts them into structured events, and produces basic alerts based on simple rules.<br><br>
+
+The plan is as follows:<br>
+1.) Use my Raspberry Pi model 2 as a bridge between my modem and router to collect all information about the network<br>
+2.) Packet capture on the Pi<br>
+3.) Send PCAPs to my laptop through SSH/rsync<br>
+4.) Install a parser on my Laptop (ZeekLite or Tshark output to... JSON?)<br>
+5.) Alerting and dashboard (simple web UI or Python Flask page)
+</p>
+
+<div style="height: 4rem;"></div>
+
+<h2 id="FALI" class="large-header"> The Failure</h2>
+<p class="small-white">
+Through the command
+</p>
+
+
+    <pre class="green-code">ip a</pre>
+
+   <p class="small-white">
+I could confirm which were up and which were down 
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+    <pre class="white-code">Output:
+netbridge@raspberrypi:~ $ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel master br0 state UP group default qlen 1000
+    link/ether aa:bb:cc:dd:ee:ff brd ff:ff:ff:ff:ff:ff permaddr f2:a3:c1:4a:8d:8e
+
+3: br0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether aa:bb:cc:dd:ee:ff brd ff:ff:ff:ff:ff:ff
+    inet6 2001:0db8:3f91:7a20:4c2b:11ff:fe90:3e19 scope global dynamic mngtmpaddr 
+       valid_lft 2372sec preferred_lft 2301sec
+    inet6 fd12:ac45:89de:0021:7b9f:22aa:ff03:8d71 scope global dynamic mngtmpaddr 
+       valid_lft 2590701sec preferred_lft 603501sec
+    inet6 fe80::5e7a:33ff:fe44:91c2 scope link 
+       valid_lft forever preferred_lft forever
+
+10: eth1: <BROADCAST, MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether d2:3f:a1:b7:9c:42 brd ff:ff:ff:ff:ff:ff
+</pre>
+
+<p class="small-white">
+This was perfect; my bridge was up and eth1 was down because I hadn't plugged into my modem just yet.<br><br>
+
+I was ready. I unplugged the modem's Ethernet and plugged it into my Pi, creating the bridge.<br><br>
+
+Through <code>ip a</code>, I found that all systems were up... so why wasn't it working? The internet went down, it redirected me to the login page of the router, it wouldn't load, and even if it did, I didn't know what I was doing, so I quickly plugged everything back in.<br><br>
+
+I wondered why the Sky router had rejected my Pi; I thought it could be something related to the MAC address — maybe the modem was expecting my router's MAC instead of my Pi's — and so I attempted to spoof my router's MAC.
+</p>
+
+
+
+
+ <pre class="green-code">sudo ip link set eth0 down
+sudo ip link set eth0 address aa:bb:cc:dd:ee:ff
+sudo ip link set eth0 up
+</pre>
+
+
+
+<p class="small-white">
+I then rebuilt the bridge.</p>
+
+<p class="small-white">
+It didn't work. I had no idea what I was doing. I didn't want to break anything else, so I left it alone. I had knocked all the Alexa's in my house off the WiFi, along with a few smart TVs, as though there had been an attempt to change the password, even though I didn't.<br><br>
+
+The bridge itself was fine, but the issue appeared when the link involved Sky's WAN side, which expects ISP-specific tagging and authentication. The Pi wasn't forwarding multiple identifiers like:<br><br>
+
+- DHCP option 61 (the client ID)<br>
+- VLAN tags<br>
+- Specific DHCP timings
+</p>
+
+
+
+
+
+
+<div style="margin-top: 100px;"></div>
+
+    <h2 id="PIVVY" class="large-header">Pivot: Single-Device NDR</h2>
+
+<p class="small-white">
+Bridging ISP equipment wasn't going to work, so I decided to downsize the project to one device I can actually control instead of a whole network: my laptop. The bridge would sit between the router and the ThinkPad with no VLANs or authentication required to collect data.<br><br>
+
+I set the bridge up once again to check if this actually worked. I turned off WiFi to ensure the connection only passed through the Ethernet.<br><br>
+
+On the ThinkPad, I ran a ping; if the bridge was working, I should see both the request and reply flow through the Pi, and I did.<br><br>
+
+On my Pi, I saw
+</p>
+
+
+
+
+ <pre class="white-code">Output:
+IP 172.16.0.47 > 8.8.8.8: ICMP echo request
+IP 8.8.8.8 > 172.16.0.47: ICMP echo reply
+</pre>
+
+<p class="small-white">
+This verifies that the Pi is forwarding LAN frames correctly and that I'm able to capture traffic.<br><br>
+
+With the bridge working, the next step is figuring out what kind of traffic the Pi can actually reveal.
+</p>
+
+
+
+
+
+
+
+
+
+    <p class="small-white" style="margin-top: 10px; font-size: 0.85rem; color: var(--matrix);">
+        <span id="quiz-answer" style="display: none;">Correct answer: D (Although the Nmap output suggests a Philips Hue Bridge, a Wifi Extender is a commonly found lightweight embedded device in home networks, which is the type of device the OS fingerprinting picked up.)</span>
+    </p>
+</div>
+<div style="margin-top: 100px;"></div>
+
+
+
+  <button onclick="topFunction()" id="back-to-top" title="Go to top">▲</button>
+
+  <script>
+    
+    // --- Back to Top Functionality ---
+    let mybutton = document.getElementById("back-to-top");
+
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+      if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+        mybutton.style.display = "flex";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+  </script>
+</body>
+</html> 
